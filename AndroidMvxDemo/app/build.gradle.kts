@@ -7,6 +7,10 @@ android {
     namespace = "com.den3000.androidmvxdemo"
     compileSdk = 34
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "com.den3000.androidmvxdemo"
         minSdk = 24
