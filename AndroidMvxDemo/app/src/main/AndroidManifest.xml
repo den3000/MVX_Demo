@@ -13,6 +13,21 @@
         android:theme="@style/Theme.AndroidMvxDemo"
         tools:targetApi="31">
         <activity
+            android:name=".ViewMvxActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ViewMviActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ViewMvvmActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ViewMvpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ViewMvcActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

@@ -49,6 +49,16 @@
         android:text="View MVI"/>
 
     <Button
+        android:id="@+id/btViewMvx"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="View MVX"/>
+
+    <Button
         android:id="@+id/btComposeMvvm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -69,13 +79,13 @@
         android:text="Compose MVI"/>
 
     <Button
-        android:id="@+id/btBest"
+        android:id="@+id/btComposeMvx"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Best"/>
+        android:text="Compose MVX"/>
 
 </LinearLayout>

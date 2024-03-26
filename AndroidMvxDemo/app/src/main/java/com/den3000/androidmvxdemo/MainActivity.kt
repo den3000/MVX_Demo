@@ -1,5 +1,6 @@
 package com.den3000.androidmvxdemo
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -20,20 +21,22 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         binding.btViewMvp.setOnClickListener(this)
         binding.btViewMvvm.setOnClickListener(this)
         binding.btViewMvi.setOnClickListener(this)
+        binding.btViewMvx.setOnClickListener(this)
         binding.btComposeMvvm.setOnClickListener(this)
         binding.btComposeMvi.setOnClickListener(this)
-        binding.btBest.setOnClickListener(this)
+        binding.btComposeMvx.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
         when (v) {
-            binding.btViewMvc -> println("btViewMvc")
-            binding.btViewMvp -> println("btViewMvp")
-            binding.btViewMvvm -> println("btViewMvvm")
-            binding.btViewMvi -> println("btViewMvi")
+            binding.btViewMvc -> startActivity(Intent(this, ViewMvcActivity::class.java))
+            binding.btViewMvp -> startActivity(Intent(this, ViewMvpActivity::class.java))
+            binding.btViewMvvm -> startActivity(Intent(this, ViewMvvmActivity::class.java))
+            binding.btViewMvi -> startActivity(Intent(this, ViewMviActivity::class.java))
+            binding.btViewMvx -> startActivity(Intent(this, ViewMvxActivity::class.java))
             binding.btComposeMvvm -> println("btComposeMvvm")
             binding.btComposeMvi -> println("btComposeMvi")
-            binding.btBest -> println("btBest")
+            binding.btComposeMvx -> println("btComposeMvx")
         }
     }
 }
