@@ -34,9 +34,9 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             binding.btViewMvvm -> startActivity(Intent(this, ViewMvvmActivity::class.java))
             binding.btViewMvi -> startActivity(Intent(this, ViewMviActivity::class.java))
             binding.btViewMvx -> startActivity(Intent(this, ViewMvxActivity::class.java))
-            binding.btComposeMvvm -> println("btComposeMvvm")
-            binding.btComposeMvi -> println("btComposeMvi")
-            binding.btComposeMvx -> println("btComposeMvx")
+            binding.btComposeMvvm -> startActivity(Intent(this, ComposeMvvmActivity::class.java))
+            binding.btComposeMvi -> startActivity(Intent(this, ComposeMviActivity::class.java))
+            binding.btComposeMvx -> startActivity(Intent(this, ComposeMvxActivity::class.java))
         }
     }
 }

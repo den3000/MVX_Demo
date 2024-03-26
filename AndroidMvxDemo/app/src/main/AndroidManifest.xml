@@ -13,6 +13,21 @@
         android:theme="@style/Theme.AndroidMvxDemo"
         tools:targetApi="31">
         <activity
+            android:name=".ComposeMvxActivity"
+            android:exported="false"
+            android:label="@string/title_activity_compose_mvx"
+            android:theme="@style/Theme.AndroidMvxDemo" />
+        <activity
+            android:name=".ComposeMviActivity"
+            android:exported="false"
+            android:label="@string/title_activity_compose_mvi"
+            android:theme="@style/Theme.AndroidMvxDemo" />
+        <activity
+            android:name=".ComposeMvvmActivity"
+            android:exported="false"
+            android:label="@string/title_activity_compose_mvvm"
+            android:theme="@style/Theme.AndroidMvxDemo" />
+        <activity
             android:name=".ViewMvxActivity"
             android:exported="false" />
         <activity
