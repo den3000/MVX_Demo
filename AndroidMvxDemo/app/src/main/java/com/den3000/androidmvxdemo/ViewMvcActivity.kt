@@ -63,18 +63,21 @@ class ViewMvcActivity : AppCompatActivity(),
     }
 
     override fun initList() {
+        progress(show = true)
         scope.launch {
             resetModel()
             withContext(Dispatchers.Main) {
                 adapter = ItemsAdapter(modelDataset())
                 binding.rvItems.layoutManager = LinearLayoutManager(this@ViewMvcActivity)
                 binding.rvItems.adapter = adapter
+                progress(show = false)
             }
         }
     }
 
     override fun filterList(cs: CharSequence?) {
         textChangedJob?.cancel()
+        progress(show = true)
         textChangedJob = scope.launch {
             if (cs.isNullOrEmpty()) {
                 resetModel()
@@ -84,8 +87,13 @@ class ViewMvcActivity : AppCompatActivity(),
 
             withContext(Dispatchers.Main) {
                 adapter?.dataSet = modelDataset()
+                progress(show = false)
             }
         }
+    }
+
+    override fun progress(show: Boolean) {
+        binding.piSearch.visibility = if (show) View.VISIBLE else View.INVISIBLE
     }
     //endregion
 
@@ -108,6 +116,7 @@ private interface IControllerToView {
     fun clearSearchText()
     fun initList()
     fun filterList(cs: CharSequence?)
+    fun progress(show: Boolean)
 }
 
 private interface IControllerToModel {

@@ -21,6 +21,15 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="HardcodedText" />
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/piSearch"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/tvTitle"
+        app:layout_constraintTop_toTopOf="@+id/tvTitle"/>
+
     <EditText
         android:id="@+id/etSearchString"
         android:layout_width="0dp"

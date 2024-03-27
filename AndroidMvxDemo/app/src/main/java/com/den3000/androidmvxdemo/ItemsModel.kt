@@ -13,7 +13,7 @@ class ItemsModel {
     }
 
     suspend fun filter(text: String) {
-        delay(3000)
+        delay(5000)
         dataset = datasource.filter { it.contains(text) }
     }
 
