@@ -2,12 +2,16 @@ package com.den3000.androidmvxdemo
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.den3000.androidmvxdemo.databinding.ActivityViewMvcBinding
 
-class ViewMvcActivity : AppCompatActivity() {
+class ViewMvcActivity : AppCompatActivity(), TextWatcher, View.OnClickListener {
 
+    private var model = ItemsModel()
     private lateinit var binding: ActivityViewMvcBinding
 
     @SuppressLint("NotifyDataSetChanged")
@@ -18,40 +22,26 @@ class ViewMvcActivity : AppCompatActivity() {
         setContentView(view)
 
         binding.tvTitle.text = "View MVC"
-
-        val dataset = arrayOf(
-            "Multitier architecture",
-            "Model–view–controller",
-            "Domain-driven design",
-            "Blackboard pattern",
-            "Sensor–controller–actuator",
-            "Presentation–abstraction–control",
-            "Component-based",
-            "Monolithic application",
-            "Strangler fig pattern",
-            "Layered",
-            "Pipes and filters",
-            "Database-centric",
-            "Blackboard",
-            "Rule-based",
-            "Event-driven aka implicit invocation",
-            "Publish-subscribe",
-            "Asynchronous messaging",
-            "Microkernel",
-            "Reflection",
-            "Client-server",
-            "Shared nothing architecture",
-            "Space-based architecture",
-            "Object request broker",
-            "Peer-to-peer",
-            "Representational state transfer",
-            "Service-oriented",
-            "Cloud computing patterns",
-        )
+        binding.btClearSearch.setOnClickListener(this)
+        binding.etSearchString.addTextChangedListener(this)
 
         with(binding.rvItems) {
             layoutManager = LinearLayoutManager(this@ViewMvcActivity)
-            adapter = ItemsAdapter(dataset)
+            adapter = ItemsAdapter(model.all())
+        }
+    }
+
+    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
+
+    override fun onTextChanged(cs: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        println("$cs $p1 $p2 $p3")
+    }
+
+    override fun afterTextChanged(p0: Editable?) { }
+
+    override fun onClick(view: View?) {
+        when(view) {
+            binding.btClearSearch -> binding.etSearchString.text = null
         }
     }
 }
