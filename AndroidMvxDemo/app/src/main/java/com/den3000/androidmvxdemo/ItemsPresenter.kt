@@ -6,21 +6,22 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
 class ItemsPresenter(private val view: IView):
     IPresenterToModel,
     IModelToPresenter
 {
-
     private var model = ItemsModel()
     private var scope = CoroutineScope(context = Dispatchers.IO)
     private var textChangedJob: Job? = null
 
-    fun start() {
+    init {
         view.progress(show = true)
         scope.launch {
             model.all()
-            updateList()
+            withContext(Dispatchers.Main) {
+                updateList()
+                view.progress(show = false)
+            }
         }
     }
 
@@ -37,17 +38,18 @@ class ItemsPresenter(private val view: IView):
             } else {
                 filterModel(cs.toString())
             }
-            updateList()
+
+            withContext(Dispatchers.Main) {
+                updateList()
+                view.progress(show = false)
+            }
         }
     }
 
-    private suspend fun updateList() {
-        withContext(Dispatchers.Main) {
-            val dataset = modelDataset()
-            view.update(dataset)
-            view.results(display = dataset.isNotEmpty())
-            view.progress(show = true)
-        }
+    private fun updateList() {
+        val dataset = modelDataset()
+        view.update(dataset)
+        view.results(display = dataset.isNotEmpty())
     }
 
     interface IView {
