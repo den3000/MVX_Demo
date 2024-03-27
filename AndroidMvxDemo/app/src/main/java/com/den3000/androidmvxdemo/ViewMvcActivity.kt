@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.den3000.androidmvxdemo.databinding.ActivityViewMvcBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -17,11 +18,11 @@ class ViewMvcActivity : AppCompatActivity(),
     ViewToController,
     ControllerToView
 {
-
     private lateinit var binding: ActivityViewMvcBinding
 
     private var model = ItemsModel()
     private var scope = CoroutineScope(context = Dispatchers.IO)
+    private var textChangedJob: Job? = null
     private var adapter: ItemsAdapter? = null
 
     @SuppressLint("NotifyDataSetChanged")
@@ -71,7 +72,8 @@ class ViewMvcActivity : AppCompatActivity(),
     }
 
     override fun filterList(cs: CharSequence?) {
-        scope.launch {
+        textChangedJob?.cancel()
+        textChangedJob = scope.launch {
             val dataset = if (cs.isNullOrEmpty()) {
                 model.all()
             } else {
