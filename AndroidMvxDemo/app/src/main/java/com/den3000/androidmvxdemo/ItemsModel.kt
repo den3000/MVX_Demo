@@ -4,17 +4,20 @@ import kotlinx.coroutines.delay
 
 class ItemsModel {
 
-    suspend fun all() : List<String> {
+    var dataset = emptyList<String>()
+        private set
+
+    suspend fun all() {
         delay(1000)
-        return dataset
+        dataset = datasource
     }
 
-    suspend fun filter(string: String) : List<String> {
-        delay(1000)
-        return dataset.filter { it.contains(string) }
+    suspend fun filter(text: String) {
+        delay(3000)
+        dataset = datasource.filter { it.contains(text) }
     }
 
-    private val dataset = listOf(
+    private val datasource = listOf(
         "Multitier architecture",
         "Model–view–controller",
         "Domain-driven design",

@@ -15,8 +15,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ViewMvcActivity : AppCompatActivity(),
-    ViewToController,
-    ControllerToView
+    IViewToController,
+    IControllerToView,
+    IControllerToModel,
+    IModelToController
 {
     private lateinit var binding: ActivityViewMvcBinding
 
@@ -62,9 +64,9 @@ class ViewMvcActivity : AppCompatActivity(),
 
     override fun initList() {
         scope.launch {
-            val dataset = model.all()
+            resetModel()
             withContext(Dispatchers.Main) {
-                adapter = ItemsAdapter(dataset)
+                adapter = ItemsAdapter(modelDataset())
                 binding.rvItems.layoutManager = LinearLayoutManager(this@ViewMvcActivity)
                 binding.rvItems.adapter = adapter
             }
@@ -74,26 +76,45 @@ class ViewMvcActivity : AppCompatActivity(),
     override fun filterList(cs: CharSequence?) {
         textChangedJob?.cancel()
         textChangedJob = scope.launch {
-            val dataset = if (cs.isNullOrEmpty()) {
-                model.all()
+            if (cs.isNullOrEmpty()) {
+                resetModel()
             } else {
-                model.filter(cs.toString())
+                filterModel(cs.toString())
             }
 
             withContext(Dispatchers.Main) {
-                adapter?.dataSet = dataset
+                adapter?.dataSet = modelDataset()
             }
         }
     }
     //endregion
+
+    //region ControllerToView
+    override suspend fun resetModel() { model.all() }
+
+    override suspend fun filterModel(text: String) { model.filter(text) }
+    //endregion
+
+    //region ModelToController
+    override fun modelDataset(): List<String> = model.dataset
+    //endregion
 }
 
-private interface ViewToController:
+private interface IViewToController:
     TextWatcher,
     View.OnClickListener
 
-private interface ControllerToView {
+private interface IControllerToView {
     fun clearSearchText()
     fun initList()
     fun filterList(cs: CharSequence?)
+}
+
+private interface IControllerToModel {
+    suspend fun resetModel()
+    suspend fun filterModel(text: String)
+}
+
+private interface IModelToController {
+    fun modelDataset(): List<String>
 }
