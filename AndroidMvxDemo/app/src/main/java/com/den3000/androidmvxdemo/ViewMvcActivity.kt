@@ -67,7 +67,9 @@ class ViewMvcActivity : AppCompatActivity(),
         scope.launch {
             resetModel()
             withContext(Dispatchers.Main) {
-                adapter = ItemsAdapter(modelDataset())
+                val dataset = modelDataset()
+                results(display = dataset.isNotEmpty())
+                adapter = ItemsAdapter(dataset)
                 binding.rvItems.layoutManager = LinearLayoutManager(this@ViewMvcActivity)
                 binding.rvItems.adapter = adapter
                 progress(show = false)
@@ -86,7 +88,9 @@ class ViewMvcActivity : AppCompatActivity(),
             }
 
             withContext(Dispatchers.Main) {
-                adapter?.dataSet = modelDataset()
+                val dataset = modelDataset()
+                results(display = dataset.isNotEmpty())
+                adapter?.dataSet = dataset
                 progress(show = false)
             }
         }
@@ -94,6 +98,16 @@ class ViewMvcActivity : AppCompatActivity(),
 
     override fun progress(show: Boolean) {
         binding.piSearch.visibility = if (show) View.VISIBLE else View.INVISIBLE
+    }
+
+    override fun results(display: Boolean) {
+        if (display) {
+            binding.tvNoResults.visibility = View.GONE
+            binding.rvItems.visibility = View.VISIBLE
+        } else {
+            binding.tvNoResults.visibility = View.VISIBLE
+            binding.rvItems.visibility = View.GONE
+        }
     }
     //endregion
 
@@ -117,6 +131,7 @@ private interface IControllerToView {
     fun initList()
     fun filterList(cs: CharSequence?)
     fun progress(show: Boolean)
+    fun results(display: Boolean)
 }
 
 private interface IControllerToModel {
