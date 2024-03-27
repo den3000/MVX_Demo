@@ -7,7 +7,7 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.den3000.androidmvxdemo.databinding.ActivityViewMvcBinding
+import com.den3000.androidmvxdemo.databinding.ActivityViewBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -20,7 +20,7 @@ class ViewMvcActivity : AppCompatActivity(),
     IControllerToModel,
     IModelToController
 {
-    private lateinit var binding: ActivityViewMvcBinding
+    private lateinit var binding: ActivityViewBinding
 
     private var model = ItemsModel()
     private var scope = CoroutineScope(context = Dispatchers.IO)
@@ -30,7 +30,7 @@ class ViewMvcActivity : AppCompatActivity(),
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityViewMvcBinding.inflate(layoutInflater)
+        binding = ActivityViewBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
