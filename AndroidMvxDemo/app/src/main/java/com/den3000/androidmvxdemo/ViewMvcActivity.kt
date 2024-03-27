@@ -11,8 +11,10 @@ import com.den3000.androidmvxdemo.databinding.ActivityViewMvcBinding
 
 class ViewMvcActivity : AppCompatActivity(), TextWatcher, View.OnClickListener {
 
-    private var model = ItemsModel()
     private lateinit var binding: ActivityViewMvcBinding
+
+    private var model = ItemsModel()
+    private var adapter: ItemsAdapter? = null
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,20 +23,24 @@ class ViewMvcActivity : AppCompatActivity(), TextWatcher, View.OnClickListener {
         val view = binding.root
         setContentView(view)
 
+        adapter = ItemsAdapter(model.all())
+
         binding.tvTitle.text = "View MVC"
         binding.btClearSearch.setOnClickListener(this)
         binding.etSearchString.addTextChangedListener(this)
 
-        with(binding.rvItems) {
-            layoutManager = LinearLayoutManager(this@ViewMvcActivity)
-            adapter = ItemsAdapter(model.all())
-        }
+        binding.rvItems.layoutManager = LinearLayoutManager(this)
+        binding.rvItems.adapter = adapter
     }
 
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
 
     override fun onTextChanged(cs: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        println("$cs $p1 $p2 $p3")
+        if (cs.isNullOrEmpty()) {
+            adapter?.dataSet = model.all()
+        } else {
+            adapter?.dataSet = model.filter(cs.toString())
+        }
     }
 
     override fun afterTextChanged(p0: Editable?) { }

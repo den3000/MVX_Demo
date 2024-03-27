@@ -2,11 +2,15 @@ package com.den3000.androidmvxdemo
 
 class ItemsModel {
 
-    fun all(): Array<String> {
+    fun all() : List<String> {
         return dataset
     }
 
-    private val dataset = arrayOf(
+    fun filter(string: String) : List<String> {
+        return dataset.filter { it.contains(string) }
+    }
+
+    private val dataset = listOf(
         "Multitier architecture",
         "Model–view–controller",
         "Domain-driven design",

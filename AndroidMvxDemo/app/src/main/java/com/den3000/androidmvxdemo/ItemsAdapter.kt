@@ -1,12 +1,22 @@
 package com.den3000.androidmvxdemo
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.den3000.androidmvxdemo.databinding.ViewHolderItemBinding
 
-class ItemsAdapter(private val dataSet: Array<String>) :
+class ItemsAdapter(dataSet: List<String>) :
     RecyclerView.Adapter<ItemsAdapter.ViewHolder>() {
+
+    var dataSet: List<String> = emptyList()
+        @SuppressLint("NotifyDataSetChanged")
+        set(newValue) {
+            field = newValue
+            notifyDataSetChanged()
+        }
+
+    init { this.dataSet = dataSet }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(viewGroup.context)
