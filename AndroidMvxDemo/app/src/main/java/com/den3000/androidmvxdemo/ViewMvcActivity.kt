@@ -111,7 +111,7 @@ class ViewMvcActivity : AppCompatActivity(),
     }
     //endregion
 
-    //region ControllerToView
+    //region ControllerToModel
     override suspend fun resetModel() { model.all() }
 
     override suspend fun filterModel(text: String) { model.filter(text) }
