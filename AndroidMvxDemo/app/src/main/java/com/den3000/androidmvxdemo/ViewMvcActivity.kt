@@ -8,12 +8,17 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.den3000.androidmvxdemo.databinding.ActivityViewMvcBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ViewMvcActivity : AppCompatActivity(), TextWatcher, View.OnClickListener {
 
     private lateinit var binding: ActivityViewMvcBinding
 
     private var model = ItemsModel()
+    private var scope = CoroutineScope(context = Dispatchers.IO)
     private var adapter: ItemsAdapter? = null
 
     @SuppressLint("NotifyDataSetChanged")
@@ -23,24 +28,17 @@ class ViewMvcActivity : AppCompatActivity(), TextWatcher, View.OnClickListener {
         val view = binding.root
         setContentView(view)
 
-        adapter = ItemsAdapter(model.all())
-
         binding.tvTitle.text = "View MVC"
         binding.btClearSearch.setOnClickListener(this)
         binding.etSearchString.addTextChangedListener(this)
 
-        binding.rvItems.layoutManager = LinearLayoutManager(this)
-        binding.rvItems.adapter = adapter
+        initList()
     }
 
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
 
     override fun onTextChanged(cs: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        if (cs.isNullOrEmpty()) {
-            adapter?.dataSet = model.all()
-        } else {
-            adapter?.dataSet = model.filter(cs.toString())
-        }
+        filterList(cs)
     }
 
     override fun afterTextChanged(p0: Editable?) { }
@@ -48,6 +46,31 @@ class ViewMvcActivity : AppCompatActivity(), TextWatcher, View.OnClickListener {
     override fun onClick(view: View?) {
         when(view) {
             binding.btClearSearch -> binding.etSearchString.text = null
+        }
+    }
+
+    private fun initList() {
+        scope.launch {
+            val dataset = model.all()
+            withContext(Dispatchers.Main) {
+                adapter = ItemsAdapter(dataset)
+                binding.rvItems.layoutManager = LinearLayoutManager(this@ViewMvcActivity)
+                binding.rvItems.adapter = adapter
+            }
+        }
+    }
+
+    private fun filterList(cs: CharSequence?) {
+        scope.launch {
+            val dataset = if (cs.isNullOrEmpty()) {
+                model.all()
+            } else {
+                model.filter(cs.toString())
+            }
+
+            withContext(Dispatchers.Main) {
+                adapter?.dataSet = dataset
+            }
         }
     }
 }

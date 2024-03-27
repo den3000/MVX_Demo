@@ -1,12 +1,16 @@
 package com.den3000.androidmvxdemo
 
+import kotlinx.coroutines.delay
+
 class ItemsModel {
 
-    fun all() : List<String> {
+    suspend fun all() : List<String> {
+        delay(1000)
         return dataset
     }
 
-    fun filter(string: String) : List<String> {
+    suspend fun filter(string: String) : List<String> {
+        delay(1000)
         return dataset.filter { it.contains(string) }
     }
 
