@@ -13,7 +13,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ViewMvcActivity : AppCompatActivity(), TextWatcher, View.OnClickListener {
+class ViewMvcActivity : AppCompatActivity(),
+    ViewToController,
+    ControllerToView
+{
 
     private lateinit var binding: ActivityViewMvcBinding
 
@@ -35,6 +38,7 @@ class ViewMvcActivity : AppCompatActivity(), TextWatcher, View.OnClickListener {
         initList()
     }
 
+    //region ViewToController
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
 
     override fun onTextChanged(cs: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -45,11 +49,17 @@ class ViewMvcActivity : AppCompatActivity(), TextWatcher, View.OnClickListener {
 
     override fun onClick(view: View?) {
         when(view) {
-            binding.btClearSearch -> binding.etSearchString.text = null
+            binding.btClearSearch -> clearSearchText()
         }
     }
+    //endregion
 
-    private fun initList() {
+    //region ControllerToView
+    override fun clearSearchText() {
+        binding.etSearchString.text = null
+    }
+
+    override fun initList() {
         scope.launch {
             val dataset = model.all()
             withContext(Dispatchers.Main) {
@@ -60,7 +70,7 @@ class ViewMvcActivity : AppCompatActivity(), TextWatcher, View.OnClickListener {
         }
     }
 
-    private fun filterList(cs: CharSequence?) {
+    override fun filterList(cs: CharSequence?) {
         scope.launch {
             val dataset = if (cs.isNullOrEmpty()) {
                 model.all()
@@ -73,4 +83,15 @@ class ViewMvcActivity : AppCompatActivity(), TextWatcher, View.OnClickListener {
             }
         }
     }
+    //endregion
+}
+
+private interface ViewToController:
+    TextWatcher,
+    View.OnClickListener
+
+private interface ControllerToView {
+    fun clearSearchText()
+    fun initList()
+    fun filterList(cs: CharSequence?)
 }
