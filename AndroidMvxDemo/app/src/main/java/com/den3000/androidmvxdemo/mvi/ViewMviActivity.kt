@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.den3000.androidmvxdemo.databinding.ActivityViewBinding
@@ -17,6 +18,7 @@ class ViewMviActivity : AppCompatActivity(),
     private lateinit var binding: ActivityViewBinding
 
     private var adapter: ItemsAdapter? = null
+    private val intenter: ItemsIntenter by viewModels { ItemsIntenter.Factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
