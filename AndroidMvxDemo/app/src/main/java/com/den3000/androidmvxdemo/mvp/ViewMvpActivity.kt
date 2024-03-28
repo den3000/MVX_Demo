@@ -1,4 +1,4 @@
-package com.den3000.androidmvxdemo
+package com.den3000.androidmvxdemo.mvp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +7,8 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.den3000.androidmvxdemo.databinding.ActivityViewBinding
+import com.den3000.androidmvxdemo.mvp.ItemsPresenter
+import com.den3000.androidmvxdemo.shared.ItemsAdapter
 
 class ViewMvpActivity : AppCompatActivity(),
     View.OnClickListener,

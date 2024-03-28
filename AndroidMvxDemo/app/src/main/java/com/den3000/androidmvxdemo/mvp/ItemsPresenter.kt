@@ -1,5 +1,6 @@
-package com.den3000.androidmvxdemo
+package com.den3000.androidmvxdemo.mvp
 
+import com.den3000.androidmvxdemo.shared.ItemsModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

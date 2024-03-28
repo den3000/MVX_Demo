@@ -1,4 +1,4 @@
-package com.den3000.androidmvxdemo
+package com.den3000.androidmvxdemo.shared
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater

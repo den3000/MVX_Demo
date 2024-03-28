@@ -1,4 +1,4 @@
-package com.den3000.androidmvxdemo
+package com.den3000.androidmvxdemo.mvx
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

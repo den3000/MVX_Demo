@@ -6,6 +6,14 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
 import com.den3000.androidmvxdemo.databinding.ActivityMainBinding
+import com.den3000.androidmvxdemo.mvc.ViewMvcActivity
+import com.den3000.androidmvxdemo.mvi.ComposeMviActivity
+import com.den3000.androidmvxdemo.mvi.ViewMviActivity
+import com.den3000.androidmvxdemo.mvp.ViewMvpActivity
+import com.den3000.androidmvxdemo.mvvm.ComposeMvvmActivity
+import com.den3000.androidmvxdemo.mvvm.ViewMvvmActivity
+import com.den3000.androidmvxdemo.mvx.ComposeMvxActivity
+import com.den3000.androidmvxdemo.mvx.ViewMvxActivity
 
 class MainActivity : AppCompatActivity(), OnClickListener {
 

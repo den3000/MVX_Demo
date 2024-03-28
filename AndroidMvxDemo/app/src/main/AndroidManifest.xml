@@ -13,34 +13,34 @@
         android:theme="@style/Theme.AndroidMvxDemo"
         tools:targetApi="31">
         <activity
-            android:name=".ComposeMvxActivity"
+            android:name=".mvx.ComposeMvxActivity"
             android:exported="false"
             android:label="@string/title_activity_compose_mvx"
             android:theme="@style/Theme.AndroidMvxDemo" />
         <activity
-            android:name=".ComposeMviActivity"
+            android:name=".mvi.ComposeMviActivity"
             android:exported="false"
             android:label="@string/title_activity_compose_mvi"
             android:theme="@style/Theme.AndroidMvxDemo" />
         <activity
-            android:name=".ComposeMvvmActivity"
+            android:name=".mvvm.ComposeMvvmActivity"
             android:exported="false"
             android:label="@string/title_activity_compose_mvvm"
             android:theme="@style/Theme.AndroidMvxDemo" />
         <activity
-            android:name=".ViewMvxActivity"
+            android:name=".mvx.ViewMvxActivity"
             android:exported="false" />
         <activity
-            android:name=".ViewMviActivity"
+            android:name=".mvi.ViewMviActivity"
             android:exported="false" />
         <activity
-            android:name=".ViewMvvmActivity"
+            android:name=".mvvm.ViewMvvmActivity"
             android:exported="false" />
         <activity
-            android:name=".ViewMvpActivity"
+            android:name=".mvp.ViewMvpActivity"
             android:exported="false" />
         <activity
-            android:name=".ViewMvcActivity"
+            android:name=".mvc.ViewMvcActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
