@@ -12,7 +12,12 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ItemsViewModel : ViewModel() {
+class ItemsViewModel : ViewModel(),
+    IViewModelToView,
+    IViewToViewModel,
+    IViewModelToModel,
+    IModelToViewModel
+{
 
     private val model = ItemsModel()
     private var scope = CoroutineScope(context = Dispatchers.IO)
@@ -24,41 +29,61 @@ class ItemsViewModel : ViewModel() {
     val dataset: MutableLiveData<List<String>> by lazy { MutableLiveData<List<String>>() }
 
     init {
-        isShowProgress.value = true
+        progress(show = true)
         scope.launch {
-            model.all()
+            resetModel()
             withContext(Dispatchers.Main) {
                 updateList()
-                isShowProgress.value = false
+                progress(show = false)
             }
         }
     }
 
-    fun onClearPressed() {
-        searchText.value = null
+    //region ViewToViewModel
+    override fun onClearPressed() {
+        clearSearchText()
     }
 
-    fun onSearchTextChanged(cs: CharSequence?) {
+    override fun onSearchTextChanged(cs: CharSequence?) {
         textChangedJob?.cancel()
-        isShowProgress.value = true
+        progress(show = true)
         textChangedJob = scope.launch {
             if (cs.isNullOrEmpty()) {
-                model.all()
+                resetModel()
             } else {
-                model.filter(cs.toString())
+                filterModel(cs.toString())
             }
 
             withContext(Dispatchers.Main) {
                 updateList()
-                isShowProgress.value = false
+                progress(show = false)
             }
         }
     }
+    //endregion
 
-    private fun updateList() {
-        dataset.value = model.dataset
-        isShowResults.value = dataset.value?.isNotEmpty() ?: false
+    //region ViewModelToView
+    override fun clearSearchText() { searchText.value = null }
+
+    override fun progress(show: Boolean) { isShowProgress.value = show }
+
+    override fun results(list: List<String>?) {
+        dataset.value = list
+        isShowResults.value = list?.isNotEmpty() ?: false
     }
+    //endregion
+
+    //region IViewModelToModel
+    override suspend fun resetModel() { model.all() }
+
+    override suspend fun filterModel(text: String) { model.filter(text) }
+    //endregion
+
+    //region IModelToViewModel
+    override fun modelDataset(): List<String> = model.dataset
+    //endregion
+
+    private fun updateList() { results(modelDataset()) }
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
@@ -68,4 +93,24 @@ class ItemsViewModel : ViewModel() {
             }
         }
     }
+}
+
+private interface IViewModelToView {
+    fun clearSearchText()
+    fun progress(show: Boolean)
+    fun results(list: List<String>?)
+}
+
+private interface IViewToViewModel {
+    fun onClearPressed()
+    fun onSearchTextChanged(cs: CharSequence?)
+}
+
+private interface IViewModelToModel {
+    suspend fun resetModel()
+    suspend fun filterModel(text: String)
+}
+
+private interface IModelToViewModel {
+    fun modelDataset(): List<String>
 }
