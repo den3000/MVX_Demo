@@ -124,10 +124,6 @@ class ViewMvcActivity : AppCompatActivity(),
     //endregion
 }
 
-private interface IViewToController:
-    TextWatcher,
-    View.OnClickListener
-
 private interface IControllerToView {
     fun clearSearchText()
     fun initList()
@@ -135,6 +131,10 @@ private interface IControllerToView {
     fun progress(show: Boolean)
     fun results(display: Boolean)
 }
+
+private interface IViewToController:
+    TextWatcher,
+    View.OnClickListener
 
 private interface IControllerToModel {
     suspend fun resetModel()

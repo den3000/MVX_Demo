@@ -7,13 +7,12 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.den3000.androidmvxdemo.databinding.ActivityViewBinding
-import com.den3000.androidmvxdemo.mvp.ItemsPresenter
 import com.den3000.androidmvxdemo.shared.ItemsAdapter
 
 class ViewMvpActivity : AppCompatActivity(),
     View.OnClickListener,
     TextWatcher,
-    ItemsPresenter.IView
+    ItemsPresenter.IPresenterToView
 {
     private lateinit var binding: ActivityViewBinding
 
@@ -55,7 +54,7 @@ class ViewMvpActivity : AppCompatActivity(),
     }
     //endregion
 
-    //region ItemsPresenter.IView
+    //region ItemsPresenter.IPresenterToView
     override fun clearSearchText() { binding.etSearchString.text = null }
 
     override fun progress(show: Boolean) {

@@ -7,7 +7,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ItemsPresenter(private val view: IView):
+class ItemsPresenter(private val view: IPresenterToView):
+    IViewToPresenter,
     IPresenterToModel,
     IModelToPresenter
 {
@@ -26,11 +27,12 @@ class ItemsPresenter(private val view: IView):
         }
     }
 
-    fun onClearPressed() {
+    //region ViewToPresenter
+    override fun onClearPressed() {
         view.clearSearchText()
     }
 
-    fun onSearchTextChanged(cs: CharSequence?) {
+    override fun onSearchTextChanged(cs: CharSequence?) {
         textChangedJob?.cancel()
         view.progress(show = true)
         textChangedJob = scope.launch {
@@ -46,19 +48,7 @@ class ItemsPresenter(private val view: IView):
             }
         }
     }
-
-    private fun updateList() {
-        val dataset = modelDataset()
-        view.update(dataset)
-        view.results(display = dataset.isNotEmpty())
-    }
-
-    interface IView {
-        fun clearSearchText()
-        fun progress(show: Boolean)
-        fun results(display: Boolean)
-        fun update(list: List<String>)
-    }
+    //endregion
 
     //region PresenterToModel
     override suspend fun resetModel() { model.all() }
@@ -69,6 +59,24 @@ class ItemsPresenter(private val view: IView):
     //region ModelToPresenter
     override fun modelDataset(): List<String> = model.dataset
     //endregion
+
+    private fun updateList() {
+        val dataset = modelDataset()
+        view.update(dataset)
+        view.results(display = dataset.isNotEmpty())
+    }
+
+    interface IPresenterToView {
+        fun clearSearchText()
+        fun progress(show: Boolean)
+        fun results(display: Boolean)
+        fun update(list: List<String>)
+    }
+}
+
+private interface IViewToPresenter {
+    fun onClearPressed()
+    fun onSearchTextChanged(cs: CharSequence?)
 }
 
 private interface IPresenterToModel {
