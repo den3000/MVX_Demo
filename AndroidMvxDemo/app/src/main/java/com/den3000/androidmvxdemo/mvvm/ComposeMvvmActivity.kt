@@ -18,6 +18,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -34,9 +35,9 @@ fun ComposeMvvmView(
     isShowProgress: Boolean,
     isShowResults: Boolean,
     text: String,
-    dataset: List<String>,
-    onClear: () -> Unit,
     onTextChanged: (String) -> Unit,
+    onClear: () -> Unit,
+    dataset: List<String>,
     modifier: Modifier = Modifier
 ) {
     ConstraintLayout(
@@ -52,15 +53,15 @@ fun ComposeMvvmView(
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
             modifier = modifier.constrainAs(refTitle) {
-                    width = Dimension.fillToConstraints
-                    height = Dimension.value(40.dp)
-                    end.linkTo(parent.end)
-                    start.linkTo(parent.start)
-                    top.linkTo(parent.top, margin = 16.dp)
-                }
+                width = Dimension.fillToConstraints
+                height = Dimension.value(40.dp)
+                end.linkTo(parent.end)
+                start.linkTo(parent.start)
+                top.linkTo(parent.top, margin = 16.dp)
+            }
                 .wrapContentHeight(),
 
-        )
+            )
 
         if (isShowProgress) {
             CircularProgressIndicator(
@@ -76,12 +77,12 @@ fun ComposeMvvmView(
         TextField(
             value = text,
             modifier = modifier.constrainAs(refSearch) {
-                    width = Dimension.fillToConstraints
-                    height = Dimension.value(40.dp)
-                    end.linkTo(parent.end)
-                    start.linkTo(parent.start)
-                    top.linkTo(refTitle.bottom, margin = 16.dp)
-                },
+                width = Dimension.fillToConstraints
+                height = Dimension.value(40.dp)
+                end.linkTo(parent.end)
+                start.linkTo(parent.start)
+                top.linkTo(refTitle.bottom, margin = 16.dp)
+            },
             onValueChange = onTextChanged
         )
 
@@ -148,9 +149,9 @@ fun ComposeMvvmViewPreview() {
             isShowProgress = true,
             isShowResults = true,
             text = "",
-            dataset = listOf("Item 1", "Item 2",  "Item 3",  "Item 4",  "Item 5",  "Item 6"),
+            onTextChanged = {},
             onClear = {},
-            onTextChanged = {}
+            dataset = listOf("Item 1", "Item 2",  "Item 3",  "Item 4",  "Item 5",  "Item 6")
         )
     }
 }
@@ -161,21 +162,26 @@ class ComposeMvvmActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
+            val isShowProgress = viewModel.isShowProgress.observeAsState(initial = false)
+            val isShowResults = viewModel.isShowResults.observeAsState(initial = true)
+            val searchText = viewModel.searchText.observeAsState(initial = "")
+            val dataset = viewModel.dataset.observeAsState(initial = emptyList())
+
             AndroidMvxDemoTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     ComposeMvvmView(
                         title = "Compose MVVM",
-                        isShowProgress = true,
-                        isShowResults = true,
-                        text = "",
-                        dataset = listOf("Item 1"),
-                        onClear = {},
-                        onTextChanged = {}
+                        isShowProgress = isShowProgress.value,
+                        isShowResults = isShowResults.value,
+                        text = searchText.value,
+                        onTextChanged = { viewModel.onSearchTextChanged(it) },
+                        onClear = { viewModel.onClearPressed() },
+                        dataset = dataset.value
                     )
                 }
             }
