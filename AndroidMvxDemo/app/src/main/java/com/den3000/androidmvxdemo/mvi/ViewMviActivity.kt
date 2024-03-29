@@ -51,6 +51,9 @@ class ViewMviActivity : AppCompatActivity(),
             }
 
             binding.etSearchString.text = SpannableStringBuilder(it.searchText)
+            if (binding.etSearchString.isFocused) {
+                binding.etSearchString.setSelection(it.searchText.length)
+            }
 
             adapter?.dataSet = it.dataset
         }

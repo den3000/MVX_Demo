@@ -24,8 +24,8 @@ class ItemsViewModel : ViewModel(),
     private var textChangedJob: Job? = null
 
     val isShowProgress: MutableLiveData<Boolean> by lazy { MutableLiveData(false) }
-    val isShowResults: MutableLiveData<Boolean> by lazy { MutableLiveData(false) }
-    val searchText: MutableLiveData<String?> by lazy { MutableLiveData(null) }
+    val isShowResults: MutableLiveData<Boolean> by lazy { MutableLiveData(true) }
+    val searchText: MutableLiveData<String> by lazy { MutableLiveData("") }
     val dataset: MutableLiveData<List<String>> by lazy { MutableLiveData<List<String>>() }
 
     init {
@@ -44,14 +44,19 @@ class ItemsViewModel : ViewModel(),
         clearSearchText()
     }
 
-    override fun onSearchTextChanged(cs: CharSequence?) {
-        textChangedJob?.cancel()
+    override fun onSearchTextChanged(text: String?) {
+        // State reducer
+        if (searchText.value == text) { return }
+
+        searchText.value = text
         progress(show = true)
+
+        textChangedJob?.cancel()
         textChangedJob = scope.launch {
-            if (cs.isNullOrEmpty()) {
+            if (text.isNullOrEmpty()) {
                 resetModel()
             } else {
-                filterModel(cs.toString())
+                filterModel(text)
             }
 
             withContext(Dispatchers.Main) {
@@ -63,7 +68,12 @@ class ItemsViewModel : ViewModel(),
     //endregion
 
     //region ViewModelToView
-    override fun clearSearchText() { searchText.value = null }
+    override fun clearSearchText() {
+        // State reducer
+        if (searchText.value == "") { return }
+
+        searchText.value = ""
+    }
 
     override fun progress(show: Boolean) { isShowProgress.value = show }
 
@@ -103,7 +113,7 @@ private interface IViewModelToView {
 
 private interface IViewToViewModel {
     fun onClearPressed()
-    fun onSearchTextChanged(cs: CharSequence?)
+    fun onSearchTextChanged(text: String?)
 }
 
 private interface IViewModelToModel {

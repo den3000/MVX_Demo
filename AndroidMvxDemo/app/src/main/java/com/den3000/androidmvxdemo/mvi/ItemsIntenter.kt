@@ -16,18 +16,6 @@ class ItemsIntenter : ViewModel(),
         IIntenterToModel,
         IModelToIntenter
 {
-    data class ViewState(
-        val isShowProgress: Boolean,
-        val isShowResults: Boolean,
-        val searchText: String,
-        val dataset: List<String>,
-    )
-
-    sealed class ViewEvent {
-        data class TextChanged(val text: String?): ViewEvent()
-        data object ClearText: ViewEvent()
-    }
-
     private val model = ItemsModel()
     private var scope = CoroutineScope(context = Dispatchers.IO)
     private var textChangedJob: Job? = null
@@ -56,15 +44,23 @@ class ItemsIntenter : ViewModel(),
 
     fun obtain(event: ViewEvent) {
         when (event) {
+            ViewEvent.ClearText -> {
+                // State reducer
+                if (viewState.value?.searchText == "") { return }
+
+                viewState.value = viewState.value?.copy(searchText = "")
+            }
+
             is ViewEvent.TextChanged -> {
                 // State reducer
                 if (viewState.value?.searchText == event.text) { return }
 
-                textChangedJob?.cancel()
                 viewState.value = viewState.value?.copy(
                     isShowProgress = true,
                     searchText = event.text ?: ""
                 )
+
+                textChangedJob?.cancel()
                 textChangedJob = scope.launch {
                     if (event.text.isNullOrEmpty()) {
                         resetModel()
@@ -81,13 +77,6 @@ class ItemsIntenter : ViewModel(),
                         )
                     }
                 }
-            }
-
-            ViewEvent.ClearText -> {
-                // State reducer
-                if (viewState.value?.searchText == "") { return }
-
-                viewState.value = viewState.value?.copy(searchText = "")
             }
         }
     }
@@ -109,6 +98,18 @@ class ItemsIntenter : ViewModel(),
                 ItemsIntenter()
             }
         }
+    }
+
+    data class ViewState(
+        val isShowProgress: Boolean,
+        val isShowResults: Boolean,
+        val searchText: String,
+        val dataset: List<String>,
+    )
+
+    sealed class ViewEvent {
+        data class TextChanged(val text: String?): ViewEvent()
+        data object ClearText: ViewEvent()
     }
 }
 

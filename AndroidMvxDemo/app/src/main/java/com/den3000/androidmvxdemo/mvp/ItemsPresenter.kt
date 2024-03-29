@@ -33,8 +33,9 @@ class ItemsPresenter(private val view: IPresenterToView):
     }
 
     override fun onSearchTextChanged(cs: CharSequence?) {
-        textChangedJob?.cancel()
         view.progress(show = true)
+
+        textChangedJob?.cancel()
         textChangedJob = scope.launch {
             if (cs.isNullOrEmpty()) {
                 resetModel()

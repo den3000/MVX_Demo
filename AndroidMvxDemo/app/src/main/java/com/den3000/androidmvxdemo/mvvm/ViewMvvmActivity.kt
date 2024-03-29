@@ -52,8 +52,11 @@ class ViewMvvmActivity : AppCompatActivity(),
             }
         }
 
-        viewModel.searchText.observe(this) { text ->
-            binding.etSearchString.text = text?.let { SpannableStringBuilder(it) }
+        viewModel.searchText.observe(this) {
+            binding.etSearchString.text = SpannableStringBuilder(it)
+            if (binding.etSearchString.isFocused) {
+                binding.etSearchString.setSelection(it.length)
+            }
         }
 
         viewModel.dataset.observe(this) {
@@ -65,7 +68,7 @@ class ViewMvvmActivity : AppCompatActivity(),
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
 
     override fun onTextChanged(cs: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        viewModel.onSearchTextChanged(cs)
+        viewModel.onSearchTextChanged(cs.toString())
     }
 
     override fun afterTextChanged(p0: Editable?) { }
