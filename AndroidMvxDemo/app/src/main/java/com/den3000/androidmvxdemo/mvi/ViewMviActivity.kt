@@ -2,6 +2,7 @@ package com.den3000.androidmvxdemo.mvi
 
 import android.os.Bundle
 import android.text.Editable
+import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import android.view.View
 import androidx.activity.viewModels
@@ -33,13 +34,33 @@ class ViewMviActivity : AppCompatActivity(),
         adapter = ItemsAdapter(emptyList())
         binding.rvItems.layoutManager = LinearLayoutManager(this)
         binding.rvItems.adapter = adapter
+
+        setupObservers()
+    }
+
+    private fun setupObservers() {
+        intenter.viewState.observe(this) {
+            binding.piSearch.visibility = if (it.isShowProgress) View.VISIBLE else View.INVISIBLE
+
+            if (it.isShowResults) {
+                binding.tvNoResults.visibility = View.GONE
+                binding.rvItems.visibility = View.VISIBLE
+            } else {
+                binding.tvNoResults.visibility = View.VISIBLE
+                binding.rvItems.visibility = View.GONE
+            }
+
+            binding.etSearchString.text = SpannableStringBuilder(it.searchText)
+
+            adapter?.dataSet = it.dataset
+        }
     }
 
     //region TextWatcher
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
 
     override fun onTextChanged(cs: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//        viewModel.onSearchTextChanged(cs)
+        intenter.obtain(ItemsIntenter.ViewEvent.TextChanged(cs?.toString()))
     }
 
     override fun afterTextChanged(p0: Editable?) { }
@@ -49,7 +70,7 @@ class ViewMviActivity : AppCompatActivity(),
     override fun onClick(view: View?) {
         when(view) {
             binding.btClearSearch -> {
-//                viewModel.onClearPressed()
+                intenter.obtain(ItemsIntenter.ViewEvent.ClearText)
             }
         }
     }
