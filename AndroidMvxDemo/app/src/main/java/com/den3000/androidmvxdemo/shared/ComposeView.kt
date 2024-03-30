@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -71,7 +72,7 @@ fun ComposeView(
             value = text,
             modifier = modifier.constrainAs(refSearch) {
                 width = Dimension.fillToConstraints
-                height = Dimension.value(40.dp)
+                height = Dimension.value(60.dp)
                 end.linkTo(parent.end)
                 start.linkTo(parent.start)
                 top.linkTo(refTitle.bottom, margin = 16.dp)
@@ -107,8 +108,10 @@ fun ComposeView(
                     Text(
                         text = it,
                         textAlign = TextAlign.Start,
-                        fontSize = 24.sp,
+                        fontSize = 23.sp,
                         fontWeight = FontWeight.Bold,
+                        overflow = TextOverflow.Visible,
+                        maxLines = 1,
                         modifier = modifier
                             .fillMaxWidth()
                             .height(60.dp)
